@@ -44,24 +44,24 @@ The project instructions from Udacity suggest starting from a known self-driving
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
 First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
-Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting.  These are the values I have used:
+Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting.  These are the values I have used based on trial and error:
 
-model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
-model.add(Dropout(.1))
-model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
-model.add(Dropout(.2))
-model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
-model.add(Dropout(.2))
-model.add(Convolution2D(64,3,3,subsample=(2,2), activation="relu"))
-model.add(Flatten())
-model.add(Dropout(.3))
-model.add(Dense(100))
-model.add(Dropout(.5))
-model.add(Dense(50))
-model.add(Dropout(.5))
-model.add(Dense(10))
-model.add(Dropout(.5))
-model.add(Dense(1))
+* model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.1))
+* model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.2))
+* model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.2))
+* model.add(Convolution2D(64,3,3,subsample=(2,2), activation="relu"))
+* model.add(Flatten())
+* model.add(Dropout(.3))
+* model.add(Dense(100))
+* model.add(Dropout(.5))
+* model.add(Dense(50))
+* model.add(Dropout(.5))
+* model.add(Dense(10))
+* model.add(Dropout(.5))
+* model.add(Dense(1))
 
 The Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron. 
 
