@@ -145,7 +145,7 @@ The use of a generator gives a really good performance and saves a lot of memory
 
 To augment the data sat, I rotate, translate, shear and flipped the image. Below is an overview of the process. As mentioned before, not all the images are transforemed, but all are flipped. Crop is done in the CNN and not in the preprocess but it is showed to see the final effect.
 
-<img src="./img/preprocess.png?raw=true" width="400px">
+<img src="./img/preprocess.png?raw=true" width="800px">
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
