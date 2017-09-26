@@ -67,17 +67,25 @@ The Adam optimizer was chosen with default parameters and the chosen loss functi
 
 ### 2. Collecting Additional Driving Data
 
-Udacity provides a dataset that can be used alone to produce a working model. However, students are encouraged (and let's admit, it's more fun) to collect our own. Particularly, Udacity encourages including "recovery" data while training. This means that data should be captured starting from the point of approaching the edge of the track (perhaps nearly missing a turn and almost driving off the track) and recording the process of steering the car back toward the center of the track to give the model a chance to learn recovery behavior. It's easy enough for experienced humans to drive the car reliably around the track, but if the model has never experienced being too close to the edge and then finds itself in just that situation it won't know how to react.
+Udacity provides a dataset that can be used alone to produce a working model. However, I decided to collect my own. 
+Data has been captured driven five laps unclockwise and file laps clockwise to the track. A Car RC controller connected as a joystick has been used to have better smooth data.
+No edge recovery data was recorded as I will use lateral cameras to control it.
+ 
 
 ### 3. Loading and Preprocessing
 
-In training mode, the simulator produces three images per frame while recording corresponding to left-, right-, and center-mounted cameras, each giving a different perspective of the track ahead. The simulator also produces a `csv` file which includes file paths for each of these images, along with the associated steering angle, throttle, brake, and speed for each frame. My algorithm loads the file paths for all three camera views for each frame, along with the angle (adjusted by +0.25 for the left frame and -0.25 for the right), into two numpy arrays `image_paths` and `angles`. [*`model.py` lines 174-211*]
+In training mode, the simulator produces three images per frame while recording corresponding to left-, right-, and center-mounted cameras, each giving a different perspective of the track ahead. 
+The simulator also produces a `csv` file which includes file paths for each of these images, along with the associated steering angle, throttle, brake, and speed for each frame. 
 
-Images produced by the simulator in training mode are 320x160, and therefore require preprocessing prior to being fed to the CNN because it expects input images to be size 200x66. To achieve this, the bottom 20 pixels and the top 35 pixels (although this number later changed) are cropped from the image and it is then resized to 200x66. A subtle Gaussian blur is also applied and the color space is converted from RGB to YUV. Because `drive.py` uses the same CNN model to predict steering angles in real time, it requires the same image preprocessing (**Note, however: using `cv2.imread`, as `model.py` does, reads images in BGR, while images received by `drive.py` from the simulator are RGB, and thus require different color space conversion**). All of this is accomplished by methods called `preprocess_image` in both `model.py` and `drive.py`. [*`model.py` lines 68-87*]
+Most data in the capture data correponds to '0' band angle meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data very close to 0 rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
+I aslo have included an extra column to the list to inform to the generator wich data will need to be tranformed. Data above 0.1 rad will be duplicated, one corresponding to the original image and other that will suffer some transformation (rotation, shear and tranlation).
 
+After the list of images and angles is build it will be passed to a generator that will be in charge of load it secuentially to the CNN. In this phase I include the side cameras (adjusted by +0.27 for the left frame and -0.27 for the right) and also a flipped version of all the images to have a median of 0 and better distribution.
+My algorithm loads the file paths for all three camera views for each frame, along with the angle (adjusted by +0.27 for the left frame and -0.27 for the right), into two numpy arrays `image_paths` and `angles`. [*`model.py` lines 174-211*]
+Images produced by the simulator in training mode are 320x160 but the top 70 pixels and the bottom 25 pixels are cropped from the image in the CNN to increse speed (work done in parallel in the GPU). 
+The use of a generator gives a really good performance and saves a lot of memory if we compare it to loading the complete data set into memory. A batch size of 32 performed well in my hardware (GTX 970 GPU).
 
-
-
+<img src="./img/histogram.png?raw=true" width="400px">
 
 ## Details About Files In This Directory
 
