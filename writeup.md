@@ -98,6 +98,11 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
+Before anything else, I would like to comment a personal technical issue I had and limited a lot my understanding of all the process. My laptop, despite being a 'workstation' model very capable with 32Gb of ram was running the simulator at very low frame ratio affectig the behaveour of the driving. 
+It took me a lot of hours/days of testing to realize that something was wrong. I performed a lot of diffent aproaches to the problem, from building a perfect uniform distribution of the data to do local contrast transformation, and nothing was working. 
+Finally I discovered that was a faulty charger not giving the correct amperage and making the processor to go into a very energy saving mode. That cost me a lot of time and missunderstanding. 
+In normal conditions, I would come to a much better aproach, but as I have consumed a lot of time on the way, I decided to leave the last model that was performing acceptable in that non ideal conditions and conclude the project not comming back to previous solutions. 
+
 My first step was to use the nVidia model without any regularization as recommended in Udacity class and croping the image 70pixels from the top and 25pixels from the bottom.
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set (80% - 20%). I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
@@ -126,7 +131,7 @@ Relu activation has been used as recommended. Dropout as explanined above was al
 #### 3. Creation of the Training Set & Training Process
 
 Most data in the capture data correponds to '0' band angle meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data very close to 0 rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
-Below Udacity data histogram (left) and combined version data histogram (right).
+Below Udacity data histogram (left) and combined version data histogram (right). Much uniform distributed data was 
  
 <img src="./img/histogram_udacity.png?raw=true" width="400px"> <img src="./img/histogram.png?raw=true" width="400px">
 	
@@ -138,10 +143,9 @@ After the list of images and angles is build it will be passed to a generator th
 Images produced by the simulator in training mode are 320x160 but the top 70 pixels and the bottom 25 pixels are cropped from the image in the CNN to increse speed (work done in parallel in the GPU). 
 The use of a generator gives a really good performance and saves a lot of memory if we compare it to loading the complete data set into memory. A batch size of 32 performed well in my hardware (GTX 970 GPU).
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+To augment the data sat, I rotate, translate, shear and flipped the image. Below is an overview of the process. As mentioned before, not all the images are transforemed, but all are flipped. Crop is done in the CNN and not in the preprocess but it is showed to see the final effect.
 
-![alt text][image6]
-![alt text][image7]
+<img src="./img/preprocess.png?raw=true" width="400px">
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
