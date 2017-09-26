@@ -38,7 +38,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* writeup.md summarizing the results
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -54,9 +54,31 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model (and later in the student forum, the comma.ai model) - the diagram below is a depiction of the nVidia model architecture.
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+<img src="./img/nVidia_model.png?raw=true" width="400px">
+
+First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
+Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting.  These are the values I have used based on trial and error:
+
+* model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.1))
+* model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.2))
+* model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
+* model.add(Dropout(.2))
+* model.add(Convolution2D(64,3,3,subsample=(2,2), activation="relu"))
+* model.add(Flatten())
+* model.add(Dropout(.3))
+* model.add(Dense(100))
+* model.add(Dropout(.5))
+* model.add(Dense(50))
+* model.add(Dropout(.5))
+* model.add(Dense(10))
+* model.add(Dropout(.5))
+* model.add(Dense(1))
+
+The Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron.  
 
 #### 2. Attempts to reduce overfitting in the model
 
