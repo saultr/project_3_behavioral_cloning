@@ -59,29 +59,27 @@ The project instructions from Udacity suggest starting from a known self-driving
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
 First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
-Relu activation has been used as recommended. 
-
-The Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron.  
+Relu activation has been used as recommended. The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron.  
 
 #### 2. Attempts to reduce overfitting in the model
 
 The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting (model.py lines 156-169).  These are the values I have used based on trial and error:
 
 * model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
-* model.add(Dropout(.1))
+* **model.add(Dropout(.1))**
 * model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
-* model.add(Dropout(.2))
+* **model.add(Dropout(.2))**
 * model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
-* model.add(Dropout(.2))
+* **model.add(Dropout(.2))**
 * model.add(Convolution2D(64,3,3,subsample=(2,2), activation="relu"))
 * model.add(Flatten())
-* model.add(Dropout(.3))
+* **model.add(Dropout(.3))**
 * model.add(Dense(100))
-* model.add(Dropout(.5))
+* **model.add(Dropout(.5))**
 * model.add(Dense(50))
-* model.add(Dropout(.5))
+* **model.add(Dropout(.5))**
 * model.add(Dense(10))
-* model.add(Dropout(.5))
+* **model.add(Dropout(.5))**
 * model.add(Dense(1))
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting. One using Udacity data and other using my own data. Final model was train in a data set resulted from the merging of both. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
