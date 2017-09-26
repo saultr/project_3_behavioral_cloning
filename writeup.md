@@ -126,10 +126,11 @@ Relu activation has been used as recommended. Dropout as explanined above was al
 #### 3. Creation of the Training Set & Training Process
 
 Most data in the capture data correponds to '0' band angle meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data very close to 0 rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
+Below Udacity data histogram (left) and combined version data histogram (right).
  
-<img src="./img/histogram.png?raw=true" width="400px"> <img src="./img/histogram_udacity.png?raw=true" width="400px"> 
+<img src="./img/histogram_udacity.png?raw=true" width="400px"> <img src="./img/histogram.png?raw=true" width="400px">
 	
-Note that the joystick had a limitation in 15° (despite being well calibrated in windows using the full range) that corresponds to 0.26 rad. That is the reason that the is few data above that value only comming from Udacity data set.
+Note that the joystick had a limitation in 15° (despite being well calibrated in windows using the full range) that corresponds to 0.26 rad. That is the reason that we have little data data above that value.
  
 I aslo have included an extra column to the list to inform to the generator wich data will need to be tranformed. Data above 0.1 rad will be duplicated, one corresponding to the original image and other that will suffer some transformation (rotation, shear and tranlation).
 
