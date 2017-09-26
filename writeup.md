@@ -82,7 +82,7 @@ The paper doesn't mention any kind of regularization. Dropout had been used in o
 * **model.add(Dropout(.5))**
 * model.add(Dense(1))
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting. One using Udacity data and other using my own data. Final model was train in a data set resulted from merging both. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. One using Udacity data and other using my own data. Final model was trained in a data set resulted from merging both. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
@@ -90,7 +90,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a center lane driving only becouse using data recovering from the left and right sides of the road were always giving worse results. Five laps in each direction were used. The final model was trained in a merge dataset with Udacity one.
+Training data was chosen to keep the vehicle driving on the road. I used a center lane driving only becouse using data recovering from the left and right sides of the road were always giving worse results. Five laps in each direction were used. The final model was trained merging my oun captured dataset with Udacity one.
 
 For details about how I created the training data, see the next section. 
 
@@ -98,15 +98,19 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+My first step was to use the nVidia model without any regularization as recommended in Udacity class and croping the image 70pixels from the top and 25pixels from the bottom.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set (80% - 20%). I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
 
-To combat the overfitting, I modified the model so that ...
+To combat the overfitting, I modified the model to include dropouts in almost every layer. I tried using it only in the fully connected layers but the model was not able to complete a lap in the simulator test. I include a ver little one in the Convulutional layers and it was improving.
 
-Then I ... 
+I also tried to use some L2 regularization, but was always non beneficial. 
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+The final step was to run the simulator to see how well the car was driving around track one. It showed a tendency to go straight to the right. I decided to include in this stage a fipped version to aproximate the mean of the values to 0. 
+
+After, there were a few spots where the vehicle went off the track in sharp turns. To improve the driving behavior in these cases, I decided to filter the data and reduce the data below 0.1 radians. It worked well. To compensate the data and help to reduce overfitting I also include a transformed version of the image for angles higher than 0.1 rad only.
+
+Next problem was that the car was hitting the wall of the bridge. To mitigate that I include the side cameras with a final compensation factor 0.27 rad.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
@@ -116,14 +120,14 @@ The project instructions from Udacity suggest starting from a known self-driving
 
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
-First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
-Relu activation has been used as recommended. 
+I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
+Relu activation has been used as recommended. Dropout as explanined above was also used.
 
 #### 3. Creation of the Training Set & Training Process
 
 Most data in the capture data correponds to '0' band angle meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data very close to 0 rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
-
-<img src="./img/histogram.png?raw=true" width="400px">
+ 
+<img src="./img/histogram.png?raw=true" width="400px"> <img src="./img/histogram_udacity.png?raw=true" width="400px"> 
 	
 Note that the joystick had a limitation in 15° (despite being well calibrated in windows using the full range) that corresponds to 0.26 rad. That is the reason that the is few data above that value only comming from Udacity data set.
  

@@ -9,7 +9,7 @@ import sklearn
 from sklearn.model_selection import train_test_split
 
 # Data Path
-path = '../../udacity/CarND-Behavioral-Cloning-P3/data_comb/'
+path = '../../udacity/CarND-Behavioral-Cloning-P3/data/'
 
 # Loading CSV File and filter data
 lines = []
