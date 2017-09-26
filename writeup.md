@@ -138,40 +138,13 @@ After the list of images and angles is build it will be passed to a generator th
 Images produced by the simulator in training mode are 320x160 but the top 70 pixels and the bottom 25 pixels are cropped from the image in the CNN to increse speed (work done in parallel in the GPU). 
 The use of a generator gives a really good performance and saves a lot of memory if we compare it to loading the complete data set into memory. A batch size of 32 performed well in my hardware (GTX 970 GPU).
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
 To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
 
 ![alt text][image6]
 ![alt text][image7]
 
-Etc ....
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+After the pre-process stage I had 67920 number of data points. I then pass it to the CNN by cropping it and Normalize with Lambda function.
 
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 2 as evidenced by both training and validation being paralell. I used an adam optimizer so that manually training the learning rate wasn't necessary.
