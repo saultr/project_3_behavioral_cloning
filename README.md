@@ -81,6 +81,8 @@ Most data in the capture data correponds to '0' band angle meaning that the data
 
 <img src="./img/histogram.png?raw=true" width="400px">
 
+Note that the joystick had a limitation in 10° (despite being well calibrated in windows using the full range) that corresponds to 0.175. That is the reason that the is no data above that value.
+ 
 I aslo have included an extra column to the list to inform to the generator wich data will need to be tranformed. Data above 0.1 rad will be duplicated, one corresponding to the original image and other that will suffer some transformation (rotation, shear and tranlation).
 
 After the list of images and angles is build it will be passed to a generator that will be in charge of load it secuentially to the CNN. In this phase I include the side cameras (adjusted by +0.27 for the left frame and -0.27 for the right) and also a flipped version of all the images to have a median of 0 and better distribution.
