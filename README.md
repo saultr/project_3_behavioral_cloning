@@ -95,9 +95,16 @@ Training the network using Adam optimizer was chosen with default parameters and
 Training and validation data were split in 80% and 20% respectively. Test data will come from the simulator and will be tested using drive.py.
 
 
-Below is an example of the training data.
+To augment the data set, I rotate, translate, shear and flipped the image. Below is an overview of the process. As mentioned before, not all the images are transforemed, only above 0.1 rad, but all are flipped. Crop is done in the CNN and not in the preprocess but it is showed to see the final effect.
 
-AÑADIR IMAGENESSSSSSSSSSSSSS
+<img src="./img/preprocess.png?raw=true" width="800px">
+
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
+
+After the pre-process stage I had 67920 number of data points. I then pass it to the CNN by cropping it and Normalize with Lambda function.
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 2 as evidenced by both training and validation being paralell. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
 
 ## Details About How to Use the files in this directory
 

@@ -143,7 +143,7 @@ After the list of images and angles is build it will be passed to a generator th
 Images produced by the simulator in training mode are 320x160 but the top 70 pixels and the bottom 25 pixels are cropped from the image in the CNN to increse speed (work done in parallel in the GPU). 
 The use of a generator gives a really good performance and saves a lot of memory if we compare it to loading the complete data set into memory. A batch size of 32 performed well in my hardware (GTX 970 GPU).
 
-To augment the data sat, I rotate, translate, shear and flipped the image. Below is an overview of the process. As mentioned before, not all the images are transforemed, but all are flipped. Crop is done in the CNN and not in the preprocess but it is showed to see the final effect.
+To augment the data set, I rotate, translate, shear and flipped the image. Below is an overview of the process. As mentioned before, not all the images are transforemed, only above 0.1 rad, but all are flipped. Crop is done in the CNN and not in the preprocess but it is showed to see the final effect.
 
 <img src="./img/preprocess.png?raw=true" width="800px">
 
