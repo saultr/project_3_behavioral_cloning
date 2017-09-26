@@ -43,6 +43,54 @@ The project instructions from Udacity suggest starting from a known self-driving
 
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
+First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
+Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting.  These are the values I have used:
+
+model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
+
+model.add(Dropout(.1))
+
+model.add(Convolution2D(36,5,5,subsample=(2,2), activation="relu"))
+
+model.add(Dropout(.2))
+
+model.add(Convolution2D(48,5,5,subsample=(2,2), activation="relu"))
+
+model.add(Dropout(.2))
+
+model.add(Convolution2D(64,3,3,subsample=(2,2), activation="relu"))
+
+model.add(Flatten())
+
+model.add(Dropout(.3))
+
+model.add(Dense(100))
+
+model.add(Dropout(.5))
+
+model.add(Dense(50))
+
+model.add(Dropout(.5))
+
+model.add(Dense(10))
+
+model.add(Dropout(.5))
+
+model.add(Dense(1))
+
+The Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron. 
+
+### 2. Collecting Additional Driving Data
+
+Udacity provides a dataset that can be used alone to produce a working model. However, students are encouraged (and let's admit, it's more fun) to collect our own. Particularly, Udacity encourages including "recovery" data while training. This means that data should be captured starting from the point of approaching the edge of the track (perhaps nearly missing a turn and almost driving off the track) and recording the process of steering the car back toward the center of the track to give the model a chance to learn recovery behavior. It's easy enough for experienced humans to drive the car reliably around the track, but if the model has never experienced being too close to the edge and then finds itself in just that situation it won't know how to react.
+
+### 3. Loading and Preprocessing
+
+In training mode, the simulator produces three images per frame while recording corresponding to left-, right-, and center-mounted cameras, each giving a different perspective of the track ahead. The simulator also produces a `csv` file which includes file paths for each of these images, along with the associated steering angle, throttle, brake, and speed for each frame. My algorithm loads the file paths for all three camera views for each frame, along with the angle (adjusted by +0.25 for the left frame and -0.25 for the right), into two numpy arrays `image_paths` and `angles`. [*`model.py` lines 174-211*]
+
+Images produced by the simulator in training mode are 320x160, and therefore require preprocessing prior to being fed to the CNN because it expects input images to be size 200x66. To achieve this, the bottom 20 pixels and the top 35 pixels (although this number later changed) are cropped from the image and it is then resized to 200x66. A subtle Gaussian blur is also applied and the color space is converted from RGB to YUV. Because `drive.py` uses the same CNN model to predict steering angles in real time, it requires the same image preprocessing (**Note, however: using `cv2.imread`, as `model.py` does, reads images in BGR, while images received by `drive.py` from the simulator are RGB, and thus require different color space conversion**). All of this is accomplished by methods called `preprocess_image` in both `model.py` and `drive.py`. [*`model.py` lines 68-87*]
+
+
 
 
 
