@@ -82,7 +82,7 @@ The paper doesn't mention any kind of regularization. Dropout had been used in o
 * **model.add(Dropout(.5))**
 * model.add(Dense(1))
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting. One using Udacity data and other using my own data. Final model was train in a data set resulted from the merging of both. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+The model was trained and validated on different data sets to ensure that the model was not overfitting. One using Udacity data and other using my own data. Final model was train in a data set resulted from merging both. The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
 #### 3. Model parameter tuning
 
@@ -90,11 +90,11 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
+Training data was chosen to keep the vehicle driving on the road. I used a center lane driving only becouse using data recovering from the left and right sides of the road were always giving worse results. Five laps in each direction were used. The final model was trained in a merge dataset with Udacity one.
 
 For details about how I created the training data, see the next section. 
 
-### Model Architecture and Training Strategy
+### Architecture and Training Documentation
 
 #### 1. Solution Design Approach
 
