@@ -44,7 +44,7 @@ The project instructions from Udacity suggest starting from a known self-driving
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
 First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
-Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout had been used in order to mitigate overfitting.  These are the values I have used based on trial and error:
+Relu activation has been used as recommended. The paper doesn't mention any kind of regularization. Dropout has been used in order to mitigate overfitting.  These are the values I have used based on trial and error:
 
 * model.add(Convolution2D(24,5,5,subsample=(2,2), activation="relu"))
 * **model.add(Dropout(.1))**
@@ -83,9 +83,9 @@ Most data in the capture data correponds to '0' band angle meaning that the data
 	
 Note that the joystick had a limitation in 15° (despite being well calibrated in windows using the full range) that corresponds to 0.26 rad. That is the reason that the is no data above that value.
  
-I aslo have included an extra column to the list to inform to the generator wich data will need to be tranformed. Data above 0.1 rad will be duplicated, one corresponding to the original image and other that will suffer some transformation (rotation, shear and tranlation).
+I aslo have included an extra column to the list to inform to the generator wich data will need to be tranformed. Data above 0.1 rad will be duplicated, one corresponding to the original image and other that will suffer some transformation (rotation, shear and translation).
 
-After the list of images and angles is build it will be passed to a generator that will be in charge of load it secuentially to the CNN. In this phase I include the side cameras (adjusted by +0.27 for the left frame and -0.27 for the right) and also a flipped version of all the images to have a median of 0 and better distribution.
+After the list of images and angles is built it will be passed to a generator that will be in charge of load it secuentially to the CNN. In this phase I include the side cameras (adjusted by +0.27 for the left frame and -0.27 for the right) and also a flipped version of all the images to have a median of 0 and better distribution.
 Images produced by the simulator in training mode are 320x160 but the top 70 pixels and the bottom 25 pixels are cropped from the image in the CNN to increse speed (work done in parallel in the GPU). 
 The use of a generator gives a really good performance and saves a lot of memory if we compare it to loading the complete data set into memory. A batch size of 32 performed well in my hardware (GTX 970 GPU).
 

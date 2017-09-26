@@ -6,7 +6,7 @@
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
+* Build a convolution neural network in Keras that predicts steering angles from images
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
@@ -48,11 +48,11 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model (and later in the student forum, the comma.ai model) - the diagram below is a depiction of the nVidia model architecture.
+The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model. The diagram below is a depiction of the nVidia model architecture.
 
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
-First I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
+First I reproduced this model as depicted in the image including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers and as described in the paper text.
 Relu activation has been used as recommended. The final layer (depicted as "output" in the diagram) is a fully-connected layer with a single neuron.  
 
 #### 2. Attempts to reduce overfitting in the model
@@ -84,7 +84,7 @@ The model used an adam optimizer, so the learning rate was not tuned manually (m
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a center lane driving only becouse using data recovering from the left and right sides of the road were always giving worse results. Five laps in each direction were used. The final model was trained merging my oun captured dataset with Udacity one.
+Training data was chosen to keep the vehicle driving on the road. I used a center lane driving only becouse using data recovering from the left and right sides of the road were always giving worse results. Five laps in each direction were used. The final model was trained merging my own captured dataset with Udacity one.
 
 For details about how I created the training data, see the next section. 
 
@@ -92,9 +92,9 @@ For details about how I created the training data, see the next section.
 
 #### 1. Solution Design Approach
 
-Before anything else, I would like to comment a personal technical issue I had and limited a lot my understanding of all the process. My laptop, despite being a 'workstation' model very capable with 32Gb of ram was running the simulator at very low frame ratio affectig the behaveour of the driving. 
+Before anything else, I would like to comment a personal technical issue I had that limited a lot my understanding of all the process. My laptop, despite being a 'workstation' model very capable with 32Gb of ram was running the simulator at very low frame ratio affectig the behaveour of the driving. 
 It took me a lot of hours/days of testing to realize that something was wrong. I performed a lot of diffent aproaches to the problem, from building a perfect uniform distribution of the data to do local contrast transformation, and nothing was working. 
-Finally I discovered that was a faulty charger not giving the correct amperage and making the processor to go into a very energy saving mode. That cost me a lot of time and missunderstanding. 
+Finally I discovered that was a faulty power supply not giving the correct amperage and making the processor to go into a very energy saving mode. That cost me a lot of time and missunderstanding. 
 In normal conditions, I would come to a much better aproach, but as I have consumed a lot of time on the way, I decided to leave the last model that was performing acceptable in that non ideal conditions and conclude the project not comming back to previous solutions. 
 
 My first step was to use the nVidia model without any regularization as recommended in Udacity class and croping the image 70pixels from the top and 25pixels from the bottom.
@@ -107,7 +107,7 @@ I also tried to use some L2 regularization, but was always non beneficial.
 
 The final step was to run the simulator to see how well the car was driving around track one. It showed a tendency to go straight to the right. I decided to include in this stage a fipped version to aproximate the mean of the values to 0. 
 
-After, there were a few spots where the vehicle went off the track in sharp turns. To improve the driving behavior in these cases, I decided to filter the data and reduce the data below 0.1 radians. It worked well. To compensate the data and help to reduce overfitting I also include a transformed version of the image for angles higher than 0.1 rad only.
+Later, there were a few spots where the vehicle went off the track in sharp turns. To improve the driving behavior in these cases, I decided to filter the data and reduce the data below 0.1 radians. It worked well. To compensate the data and help to reduce overfitting I also include a transformed version of the image for angles higher than 0.1 rad only.
 
 Next problem was that the car was hitting the wall of the bridge. To mitigate that I include the side cameras with a final compensation factor 0.27 rad.
 
@@ -115,16 +115,16 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 #### 2. Final Model Architecture
 
-The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model (and later in the student forum, the comma.ai model) - the diagram below is a depiction of the nVidia model architecture.
+The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model. The diagram below is a depiction of the nVidia model architecture.
 
 <img src="./img/nVidia_model.png?raw=true" width="400px">
 
-I reproduced this model as depicted in the image - including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers - and as described in the paper text.
+I reproduced this model as depicted in the image, including image normalization using a Keras Lambda function, with three 5x5 convolution layers, two 3x3 convolution layers, and three fully-connected layers and as described in the paper text.
 Relu activation has been used as recommended. Dropout as explanined above was also used.
 
 #### 3. Creation of the Training Set & Training Process
 
-Most data in the capture data correponds to '0' band angle meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data very close to 0 rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
+Most data in the captured data correponds to '0' band angle, meaning that the data is biased to 0. To correct that first I am filtering the csv file to remove data of 0.0rad (I keep 1 sample every 100), and also a filter of 1 out of 2 for the range below 0.1 rad.
 
 Below Udacity data histogram (left) and combined version data histogram (right). Much uniform distributed data was achieved with merged set (note different scale in the picture).
  
