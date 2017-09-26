@@ -1,7 +1,3 @@
-[//]: # (Image References)
-
-[image1]: ./img/nVidia_model.png "nVidia Model"
-
 # Behaviorial Cloning Project
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
@@ -14,7 +10,7 @@ In this project, I will train, validate and test a model using Keras. The model 
 
 This project makes use of a Udacity-developed driving simulator and training data collected from the simulator (neither of which is included in this repo) to train a neural network and then use this model to drive the car autonomously around the track.
 
-The project include five files: 
+The project include four files: 
 * model.py (script used to create and train the model)
 * drive.py (script to drive the car)
 * model.h5 (a trained Keras model)
@@ -45,7 +41,7 @@ The simulator can be downloaded from [here](https://github.com/udacity/self-driv
 
 The project instructions from Udacity suggest starting from a known self-driving car model and provided a link to the nVidia model (and later in the student forum, the comma.ai model) - the diagram below is a depiction of the nVidia model architecture.
 
-![alt text][image1]
+<img src="./img/nVidia_model.png?raw=true" width="400px">
 
 
 
