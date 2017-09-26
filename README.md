@@ -69,7 +69,7 @@ The Adam optimizer was chosen with default parameters and the chosen loss functi
 
 Udacity provides a dataset that can be used alone to produce a working model. However, I decided to collect my own. 
 Data has been captured driven five laps unclockwise and file laps clockwise to the track. A Car RC controller connected as a joystick has been used to have better smooth data.
-No edge recovery data was recorded as I will use lateral cameras to control it.
+No edge recovery data was recorded as I will use lateral cameras to control it. This data was merged with the udacity provided composing after filters a total of 67920 samples.
  
 
 ### 3. Loading and Preprocessing
@@ -91,7 +91,9 @@ The use of a generator gives a really good performance and saves a lot of memory
 
 ### 4. Training
 
-Training the network using Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). Two eppochs were used.
+Training the network using Adam optimizer was chosen with default parameters and the chosen loss function was mean squared error (MSE). Two eppochs were used. 
+Training and validation data were split in 80% and 20% respectively. Test data will come from the simulator and will be tested using drive.py.
+
 
 Below is an example of the training data.
 
