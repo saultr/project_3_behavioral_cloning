@@ -7,8 +7,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split
+
+# Data Path
 path = '../../udacity/CarND-Behavioral-Cloning-P3/data_comb/'
-#Loading CSV File
+
+# Loading CSV File and filter data
 lines = []
 with open(path+'driving_log.csv') as csvfile:
     count=0
@@ -18,22 +21,25 @@ with open(path+'driving_log.csv') as csvfile:
     next(reader)
     for line in reader:
         angle = float(line[3])
-        if (angle > -0.001 and angle < 0.001):
+        # Remove death zone samples. Take one every 100. 
+        if (abs(angle) < 0.001):
             if (count == 0):
                 lines.append(line+[0])
             count +=1
             if (count >= 100): count = 0
+        # Remove samples between 0 and 0.1 radians to minimize bias. Take one every 2. 	
         elif (abs(angle) > 0.001 and abs(angle) < 0.1):
             if (count2 == 0):
                 lines.append(line+[0])
             count2 +=1
             if (count2 >= 2): count2 = 0
+        # Duplicate samples above 0.1 radians, one will be transformed. Added an extra column to the list (0 or 1) to tell the generator to process the data (rotate, translate, etc..)
         else:
             lines.append(line+[0])
             lines.append(line+[1])
             
             
-    
+# Plot data histogram (before flip - done in the generator)    
 data=np.array(lines)[:,3].astype(float)
 data=sorted(data)
 fit = stats.norm.pdf(data, np.mean(data), np.std(data))
@@ -41,9 +47,10 @@ plt.plot(data,fit,'-r')
 plt.hist(data,100,[-0.3,0.3],normed=True)
 plt.show()
 
-
+# Split train and validation data
 train_samples, validation_samples = train_test_split(lines, test_size=0.2)
 
+# Transform image, rotate, shear, translate
 def transform_image(img,ang_range,shear_range,trans_range):
     '''
     This function transforms images to generate new images.
@@ -79,10 +86,7 @@ def transform_image(img,ang_range,shear_range,trans_range):
     img = cv2.warpAffine(img,shear_M,(cols,rows),borderMode=1)
     return img
 
-def crop_resize(image):
-    #image = cv2.resize(image[60:140,:], (200,66))
-    return image
-
+# Generator. Flip every sample data and include side cameras.
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     correction = 0.27
@@ -93,13 +97,15 @@ def generator(samples, batch_size=32):
             images = []
             measurements = []
             for batch_sample in batch_samples:
+				# Loop the 3 images: center, left, right
                 for i in range(3):
                     name = path+'IMG/'+batch_sample[i].split('/')[-1]
                     image = cv2.imread(name)
-                    image = crop_resize(image)
+                    # Agumented data if 1 in 4 column
                     if (batch_sample[4] == '1'):
                         image = transform_image(image,10,2,4)
                     measurement = float(batch_sample[3])
+                    # Add correction for left and right images
                     if i == 1:
                         measurement = measurement + correction
                     elif i == 2:
@@ -134,7 +140,6 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
-
 from keras.models import Model
 
 model = Sequential()
@@ -142,7 +147,6 @@ model = Sequential()
 #Preprocessing the images
 #Normalization and Mean Centre
 model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(160,320,3)))
-#model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape=(66,200,3)))
 
 #Image cropping
 model.add(Cropping2D(cropping=((70,25),(0,0))))
@@ -166,7 +170,6 @@ model.add(Dropout(.5))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-#history_object = model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2, verbose=1)
 history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*2*3, validation_data=validation_generator, nb_val_samples=len(validation_samples), nb_epoch=2)
 
 model.save('model.h5')
